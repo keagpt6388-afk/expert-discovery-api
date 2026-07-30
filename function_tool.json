@@ -7,9 +7,10 @@
     "properties": {
       "field": {"type": "string", "description": "Research or technology field."},
       "context": {"type": ["string", "null"], "description": "Optional narrowing context."},
+      "country_code": {"type": "string", "enum": ["KR"], "description": "Country scope; KR means researchers affiliated with Korean institutions."},
       "max_candidates": {"type": "integer", "minimum": 1, "maximum": 10}
     },
-    "required": ["field", "context", "max_candidates"],
+    "required": ["field", "context", "country_code", "max_candidates"],
     "additionalProperties": false
   },
   "strict": true

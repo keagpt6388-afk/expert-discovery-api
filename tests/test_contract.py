@@ -5,6 +5,8 @@ from app.service import EXPERT_DISCOVERY_SCHEMA
 def test_response_contract_validates():
     value = ExpertDiscoveryResponse.model_validate({
         "requested_field": "robotics",
+        "country_code": "KR",
+        "interpreted_subfields": ["robotics"],
         "candidates": [],
         "warnings": ["No candidates were returned in this synthetic test."],
     })
@@ -13,4 +15,6 @@ def test_response_contract_validates():
 
 def test_strict_schema_closes_objects():
     assert EXPERT_DISCOVERY_SCHEMA["additionalProperties"] is False
-    assert set(EXPERT_DISCOVERY_SCHEMA["required"]) == {"requested_field", "candidates", "warnings"}
+    assert set(EXPERT_DISCOVERY_SCHEMA["required"]) == {
+        "requested_field", "country_code", "interpreted_subfields", "candidates", "warnings"
+    }
