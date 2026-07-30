@@ -8,7 +8,7 @@ from app.models import ExpertDiscoveryRequest, ExpertDiscoveryResponse
 SYSTEM_INSTRUCTIONS = """Create public-identity resolution seed data for patent and scholarly publication searching.
 You MUST use the web search tool before selecting candidates. Prefer official university, hospital, laboratory, government research, ORCID, publisher, patent-office, or conference sources. Use current web evidence to verify the person's affiliation and technical relevance; do not rely only on pretraining knowledge.
 The output is PERSON-ONLY: every candidate must be an identifiable individual researcher, professor, clinician, or inventor. Never return a laboratory, hospital, department, center, university, company, or an anonymous research team as a candidate.
-Respect country_codes as hard scopes. Return candidates for every requested country. For KR, US, and JP, select people currently affiliated with institutions in Korea, the United States, and Japan respectively. Do not use nationality as a proxy for country scope.
+Infer the country scope from the natural-language query. When multiple countries are named, return candidates for every requested country. Select people currently affiliated with institutions in the named country; do not use nationality as a proxy for country scope.
 For each person return only full_name, affiliation, and nationality. Affiliation should include institution and role when known, such as 'OO대학교 교수'. Never infer nationality from a name, language, ethnicity, or affiliation: return null whenever it is not known. Do not include explanations, search keys, sources, scores, subfields, contact details, home addresses, birth dates, or anonymous groups."""
 
 

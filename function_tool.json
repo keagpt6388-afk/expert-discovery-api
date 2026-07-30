@@ -5,12 +5,10 @@
   "parameters": {
     "type": "object",
     "properties": {
-      "field": {"type": "string", "description": "Research or technology field."},
-      "context": {"type": ["string", "null"], "description": "Optional narrowing context."},
-      "country_codes": {"type": "array", "items": {"type": "string", "enum": ["KR", "US", "JP"]}, "minItems": 1, "description": "Country scopes; e.g. [KR, US, JP]."},
+      "query": {"type": "string", "description": "Natural-language expert-search request, including field, countries, and any constraints."},
       "max_candidates": {"type": "integer", "minimum": 1, "maximum": 10}
     },
-    "required": ["field", "context", "country_codes", "max_candidates"],
+    "required": ["query", "max_candidates"],
     "additionalProperties": false
   },
   "strict": true
