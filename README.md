@@ -28,6 +28,8 @@ Invoke-RestMethod http://localhost:8000/v1/expert-discovery/search -Method Post 
 
 `country_codes` defaults to `["KR"]` and can include multiple countries, for example `["KR", "US", "JP"]`. The API returns people only, not research teams or institutions. Each candidate includes `identity.display_label`, its affiliation `country_code`, the matched technical subfield, and search keys.
 
+Every request invokes the Responses API web-search tool before candidates are selected. This improves currency of affiliation and research-area information, but each web-search call is separately billed by OpenAI and still requires downstream patent/publication DB validation for final identity matching.
+
 ## Security and deployment
 
 `OPENAI_API_KEY` and `SERVICE_API_KEYS` must be configured only as environment secrets. They are excluded from Git by `.gitignore`.

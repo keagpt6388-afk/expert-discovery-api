@@ -6,6 +6,7 @@ from app.config import Settings
 from app.models import ExpertDiscoveryRequest, ExpertDiscoveryResponse
 
 SYSTEM_INSTRUCTIONS = """Create public-identity resolution seed data for patent and scholarly publication searching.
+You MUST use the web search tool before selecting candidates. Prefer official university, hospital, laboratory, government research, ORCID, publisher, patent-office, or conference sources. Use current web evidence to verify the person's affiliation and technical relevance; do not rely only on pretraining knowledge.
 The output is PERSON-ONLY: every candidate must be an identifiable individual researcher, professor, clinician, or inventor. Never return a laboratory, hospital, department, center, university, company, or an anonymous research team as a candidate.
 Respect country_codes as hard scopes. Return candidates for every requested country, and place the affiliation country in each candidate's country_code. For KR, US, and JP, select people currently affiliated with institutions in Korea, the United States, and Japan respectively. Do not use nationality as a proxy for country scope.
 Interpret a broad question into a small set of concrete, searchable technical subfields. For example, an artificial-liver query might need implantable bioprinted liver, bioartificial liver support, and liver organoid subfields. Match every person to one subfield.
@@ -41,6 +42,8 @@ class ExpertDiscoveryService:
             model=self.settings.openai_model,
             instructions=SYSTEM_INSTRUCTIONS,
             input=json.dumps(request.model_dump(), ensure_ascii=False),
+            tools=[{"type": "web_search"}],
+            tool_choice="required",
             text={
                 "format": {
                     "type": "json_schema",
