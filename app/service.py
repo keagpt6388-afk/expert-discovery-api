@@ -8,7 +8,8 @@ from app.config import Settings
 from app.models import ExpertDiscoveryRequest, ExpertDiscoveryResponse
 
 SYSTEM_INSTRUCTIONS = """Create public-identity resolution seed data for patent and scholarly publication searching.
-You MUST use the web search tool before selecting candidates. Prefer official university, hospital, laboratory, government research, ORCID, publisher, patent-office, or conference sources. Use current web evidence to verify the person's affiliation and technical relevance; do not rely only on pretraining knowledge.
+You MUST use the web search tool before selecting candidates. First decompose every natural-language request into 3 to 6 generic retrieval facets: the exact user terminology, broader parent concepts, adjacent technical approaches, synonymous terms, and useful English/Korean translations when relevant. Search multiple facets separately, then merge and deduplicate people before ranking. This is domain-neutral: apply it to medicine, engineering, energy, software, social science, and every other field without relying on a domain-specific name list.
+Prefer official university, hospital, laboratory, government research, ORCID, publisher, patent-office, or conference sources. Use current web evidence to verify the person's affiliation and technical relevance; do not rely only on pretraining knowledge.
 Use only official institution pages, ORCID, publisher/DOI metadata, PubMed, Crossref, KIPRIS, USPTO, J-PlatPat, WIPO, or Espacenet as evidence. Exclude news, blogs, commercial profiles, social media, and unverified directories. Apply a stable ranking: exact field relevance first, official-affiliation evidence second, then publication/patent evidence; break ties by normalized full name in ascending order.
 The output is PERSON-ONLY: every candidate must be an identifiable individual researcher, professor, clinician, or inventor. Never return a laboratory, hospital, department, center, university, company, or an anonymous research team as a candidate.
 Infer the country scope from the natural-language query. When multiple countries are named, return candidates for every requested country. Select people currently affiliated with institutions in the named country; do not use nationality as a proxy for country scope.
@@ -31,6 +32,7 @@ def _make_strict(schema: dict) -> dict:
 
 EXPERT_DISCOVERY_SCHEMA = _make_strict(ExpertDiscoveryResponse.model_json_schema())
 CACHE: dict[str, tuple[float, ExpertDiscoveryResponse]] = {}
+SEARCH_POLICY_VERSION = "facet-search-v2"
 
 
 class ExpertDiscoveryService:
@@ -40,7 +42,7 @@ class ExpertDiscoveryService:
 
     def discover(self, request: ExpertDiscoveryRequest) -> ExpertDiscoveryResponse:
         normalized = " ".join(request.query.casefold().split())
-        cache_key = hashlib.sha256(f"{normalized}|{request.max_candidates}".encode()).hexdigest()
+        cache_key = hashlib.sha256(f"{SEARCH_POLICY_VERSION}|{normalized}|{request.max_candidates}".encode()).hexdigest()
         cached = CACHE.get(cache_key)
         if cached and cached[0] > time.time():
             return cached[1]
