@@ -6,11 +6,9 @@ from pydantic import BaseModel, Field
 class ExpertDiscoveryRequest(BaseModel):
     field: str = Field(min_length=2, max_length=500)
     context: str | None = Field(default=None, max_length=2_000)
-    country_code: str = Field(
-        default="KR",
-        min_length=2,
-        max_length=2,
-        description="ISO 3166-1 alpha-2 country scope. Defaults to KR for domestic experts.",
+    country_codes: list[str] = Field(
+        default_factory=lambda: ["KR"], min_length=1, max_length=10,
+        description="ISO 3166-1 alpha-2 country scopes, e.g. KR, US, JP.",
     )
     max_candidates: int = Field(default=5, ge=1, le=10)
 
@@ -35,6 +33,7 @@ class SearchKey(BaseModel):
 class ExpertCandidate(BaseModel):
     identity: Identity
     matched_subfield: str
+    country_code: str
     expertise_summary: str
     selection_rationale: str
     confidence: Literal["high", "medium", "low"]
@@ -45,7 +44,7 @@ class ExpertCandidate(BaseModel):
 
 class ExpertDiscoveryResponse(BaseModel):
     requested_field: str
-    country_code: str
+    country_codes: list[str]
     interpreted_subfields: list[str]
     candidates: list[ExpertCandidate]
     warnings: list[str]

@@ -26,7 +26,7 @@ $body = @{ field = "solid-state battery materials"; context = "lithium-metal ano
 Invoke-RestMethod http://localhost:8000/v1/expert-discovery/search -Method Post -Headers $headers -ContentType application/json -Body $body
 ```
 
-`country_code` defaults to `KR`. The API returns people only, not research teams or institutions. Each candidate includes `identity.display_label`, such as `OO대학교 OO교수`, plus the matched technical subfield and search keys.
+`country_codes` defaults to `["KR"]` and can include multiple countries, for example `["KR", "US", "JP"]`. The API returns people only, not research teams or institutions. Each candidate includes `identity.display_label`, its affiliation `country_code`, the matched technical subfield, and search keys.
 
 ## Security and deployment
 
