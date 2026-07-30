@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: expert-discovery-api
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: SERVICE_API_KEYS
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-5.4
+      - key: REQUEST_TIMEOUT_SECONDS
+        value: "90"
