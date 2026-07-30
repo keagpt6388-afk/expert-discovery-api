@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     openai_api_key: str = Field(min_length=20)
     openai_model: str = "gpt-5.4"
     request_timeout_seconds: float = Field(default=90, gt=0, le=300)
+    result_cache_ttl_seconds: int = Field(default=86400, ge=60, le=604800)
 
     @property
     def allowed_service_keys(self) -> set[str]:
