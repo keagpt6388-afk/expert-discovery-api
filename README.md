@@ -28,6 +28,8 @@ Invoke-RestMethod http://localhost:8000/v1/expert-discovery/search -Method Post 
 
 `query` is the single natural-language input. Include countries, field, and any constraints in the sentence. The response returns only `full_name`, `affiliation`, and `nationality` for each individual.
 
+`nationality` is an operational label based on the person's current affiliation country (for example, a Korean institution returns `Republic of Korea`); it is not a claim about legal citizenship.
+
 Every request invokes the Responses API web-search tool before candidates are selected. This improves currency of affiliation and research-area information, but each web-search call is separately billed by OpenAI and still requires downstream patent/publication DB validation for final identity matching.
 
 ## Security and deployment
