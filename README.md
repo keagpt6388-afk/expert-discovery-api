@@ -26,7 +26,7 @@ $body = @{ field = "solid-state battery materials"; context = "lithium-metal ano
 Invoke-RestMethod http://localhost:8000/v1/expert-discovery/search -Method Post -Headers $headers -ContentType application/json -Body $body
 ```
 
-`country_codes` defaults to `["KR"]` and can include multiple countries, for example `["KR", "US", "JP"]`. The API returns people only, not research teams or institutions. Each candidate includes `identity.display_label`, its affiliation `country_code`, the matched technical subfield, and search keys.
+`country_codes` defaults to `["KR"]` and can include multiple countries, for example `["KR", "US", "JP"]`. The response returns only `full_name`, `affiliation`, and `nationality` for each individual.
 
 Every request invokes the Responses API web-search tool before candidates are selected. This improves currency of affiliation and research-area information, but each web-search call is separately billed by OpenAI and still requires downstream patent/publication DB validation for final identity matching.
 
