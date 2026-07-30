@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 class ExpertDiscoveryRequest(BaseModel):
     query: str = Field(min_length=2, max_length=2_000)
-    max_candidates: int = Field(default=5, ge=1, le=10)
+    max_candidates: int = Field(default=10, ge=1, le=10)
 
 
 class Expert(BaseModel):
